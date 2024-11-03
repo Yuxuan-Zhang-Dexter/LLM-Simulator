@@ -13,6 +13,8 @@ def main(args):
     # Automatically detect AMP support if using CUDA
     use_amp = device.type == "cuda" and torch.cuda.get_device_capability(0) >= (7, 0)
 
+    print(f'my current device: {device} and amp status: {use_amp}')
+
     # Initialize the appropriate monitor based on device
     if device.type == "cuda":
         monitor = ModelMemoryMonitorGPU(
