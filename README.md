@@ -29,19 +29,19 @@ The main script `main.py` supports memory monitoring for forward passes, trainin
 #### Forward Memory Test (GPU)
 
 ```bash
-python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test forward --device cuda --memory_unit gb
+python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test forward --device cuda --max_seq_len 2048 --memory_unit gb
 ```
 
 #### Training Memory Test (GPU)
 
 ```bash
-python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test training --device cuda --max_iters 10 --memory_unit gb
+python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test training --device cuda --max_seq_len 2048 --max_iters 10 --memory_unit gb
 ```
 
 #### Iterative Inference Memory Test (GPU)
 
 ```bash
-python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test iterative_inference --device cuda --max_iters 50 --prompt "Once upon a time" --memory_unit gb
+python main.py --model_name "TinyLlama/TinyLlama-1.1B-step-50K-105b" --test iterative_inference --device cuda --max_seq_len 2048 --max_iters 50 --prompt "Once upon a time" --memory_unit gb
 ```
 
 Replace `"cuda"` with `"cpu"` if running on a CPU, and adjust `--max_iters` or `--prompt` as needed.

@@ -14,6 +14,7 @@ def main(args):
     use_amp = device.type == "cuda" and torch.cuda.get_device_capability(0) >= (7, 0)
 
     print(f'my current device: {device} and amp status: {use_amp}')
+    print(f'Max Squence Length: {args.max_seq_len}; Max Iterations: {args.max_iters}')
 
     # Initialize the appropriate monitor based on device
     if device.type == "cuda":

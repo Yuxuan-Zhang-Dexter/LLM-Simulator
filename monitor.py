@@ -257,8 +257,13 @@ class ModelMemoryMonitorGPU:
 
         memory_dict['model_loading'] = pre_memory
         filter_peak_memory_dict = {key: max(value) for key, value in peak_memory_dict.items()}
+        iteration_peak_memory = [
+            max(peak_memory_dict['forward'][i], peak_memory_dict['backward'][i], peak_memory_dict['optimizer'][i])
+            for i in range(len(peak_memory_dict['forward']))
+            ]
         max_peak_stage, max_peak_memory = max(filter_peak_memory_dict.items(), key=lambda x: x[1])
         memory_dict[f'max_peak_memory({max_peak_stage})'] = max_peak_memory
+        memory_dict['peak_memory_per_iter'] = iteration_peak_memory
         
         print(f"The training max peak memory: {ModelMemoryUtilities.convert_memory(max_peak_memory, memory_unit)} ({max_peak_stage} stage)")
         converted_memory_dict = {
