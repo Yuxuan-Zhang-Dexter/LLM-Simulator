@@ -49,7 +49,7 @@ Replace `"cuda"` with `"cpu"` if running on a CPU, and adjust `--max_iters` or `
 ### Project Structure
 
 - `main.py`: Main script for running memory monitoring tests.
-- `monitor/`: Contains the `ModelMemoryMonitorCPU` and `ModelMemoryMonitorGPU` classes.
+- `monitor.py`: Contains the `ModelMemoryMonitorCPU` and `ModelMemoryMonitorGPU` classes.
 - `utilities.py`: Contains utility functions, including memory conversion and plotting.
 
 ### Requirements
