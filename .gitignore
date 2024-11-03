@@ -1,2 +1,11 @@
-llm-simulator-env/
+# Ignore Python cache and compiled files
 __pycache__/
+*.py[cod]
+
+# Ignore virtual environment
+llm-simulator-env/
+
+# Ignore other common files
+*.log
+*.tmp
+.DS_Store
