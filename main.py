@@ -51,7 +51,7 @@ def main(args):
             prev_mem, peak_mem_list, cur_mem_list = monitor.test_cuda_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit='byte')
         else:
             prev_mem, peak_mem_list, cur_mem_list = monitor.test_cpu_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit='byte')
-        print(f"Iterative Inference Test - Initial: {prev_mem} {args.memory_unit.upper()}")
+        print(f"Iterative Inference Test - Initial: {prev_mem}")
         print(f"Average Peak Memory per Iteration: {sum(peak_mem_list)/len(peak_mem_list)}")
         print(f"Average Current Memory per Iteration: {sum(cur_mem_list) / len(cur_mem_list)}")
         img_filename = Path(f'{args.model_name}_iter_infer_' + device.type + '.png').name
