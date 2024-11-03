@@ -1,7 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
 import torch
 from typing import Literal, Tuple, Dict, Any
-import psutil
 from utilities import ModelMemoryUtilities
 from tqdm import tqdm
 
@@ -121,7 +120,7 @@ class ModelMemoryMonitorGPU:
         # Lists to track memory usage across iterations
         peak_memory_lst, cur_memory_lst = [], []
 
-        for i in range(max_iters):
+        for i in tqdm(range(max_iters)):
             torch.cuda.reset_peak_memory_stats()
 
             with torch.no_grad():
@@ -204,7 +203,7 @@ class ModelMemoryMonitorGPU:
             'optimize_model': []
             }
 
-        for i in range(max_iters):
+        for i in tqdm(range(max_iters)):
             if use_amp:
                 with torch.amp.autocast(device_type=str(self.device)):
                     output = self.model(**sample_inputs)
@@ -375,7 +374,7 @@ class ModelMemoryMonitorCPU:
         # Lists to track memory usage across iterations
         peak_memory_lst, cur_memory_lst = [], []
 
-        for i in range(max_iters):
+        for i in tqdm(range(max_iters)):
             with torch.no_grad():
                 outputs = self.model.generate(
                     input_ids,
@@ -437,7 +436,7 @@ class ModelMemoryMonitorCPU:
             'optimize_model': []
         }
 
-        for i in range(max_iters):
+        for i in tqdm(range(max_iters)):
             optimizer.zero_grad()
             
             # Forward pass
