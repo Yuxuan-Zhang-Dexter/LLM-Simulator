@@ -4,6 +4,10 @@ from typing import Literal, Tuple
 import psutil
 from utilities import ModelMemoryUtilities
 
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+use_amp = amp_supported = torch.cuda.is_available() and torch.cuda.get_device_capability(0) >= (7, 0)
+
 class ModelMemoryMonitor:
     def __init__(self, model_name, batch_size=1, max_seq_len=4096, torch_dtype=torch.float16, use_amp=False, device="cuda"):
         """
