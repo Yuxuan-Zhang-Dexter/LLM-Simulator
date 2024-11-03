@@ -1,0 +1,10 @@
+
+---
+
+### `requirements.txt`
+
+```plaintext
+transformers
+torch
+psutil
+matplotlib

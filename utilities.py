@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import psutil
 
 
-
-
 class ModelMemoryUtilities:
     @staticmethod
     def convert_memory(memory: int, memory_unit: Literal['byte', 'mb', 'gb'] = 'byte') -> float:
@@ -16,6 +14,12 @@ class ModelMemoryUtilities:
         elif memory_unit == 'gb':
             return memory / 1073741824  # Convert bytes to GB
         return memory  # Default to bytes
+    
+    @staticmethod
+    def measure_cpu_memory() -> int:
+        """Measure CPU memory usage in bytes."""
+        process = psutil.Process()
+        return process.memory_info().rss
 
     @staticmethod
     def get_logits(model_output) -> torch.Tensor:
