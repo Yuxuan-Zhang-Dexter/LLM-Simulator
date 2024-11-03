@@ -3,6 +3,8 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from utilities import ModelMemoryUtilities
 from monitor import ModelMemoryMonitorGPU, ModelMemoryMonitorCPU  # Import both classes
+from utilities import ModelMemoryUtilities
+from pathlib import Path
 
 def main(args):
     # Set device
@@ -44,19 +46,23 @@ def main(args):
 
     elif args.test == "iterative_inference":
         if device.type == "cuda":
-            prev_mem, peak_mem_list, cur_mem_list = monitor.test_cuda_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit=args.memory_unit)
+            prev_mem, peak_mem_list, cur_mem_list = monitor.test_cuda_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit='byte')
         else:
-            prev_mem, peak_mem_list, cur_mem_list = monitor.test_cpu_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit=args.memory_unit)
+            prev_mem, peak_mem_list, cur_mem_list = monitor.test_cpu_iterative_inference_memory(prompt, max_iters=args.max_iters, memory_unit='byte')
         print(f"Iterative Inference Test - Initial: {prev_mem} {args.memory_unit.upper()}")
-        print(f"Peak Memory per Iteration: {peak_mem_list}")
-        print(f"Current Memory per Iteration: {cur_mem_list}")
+        print(f"Average Peak Memory per Iteration: {sum(peak_mem_list)/len(peak_mem_list)}")
+        print(f"Average Current Memory per Iteration: {sum(cur_mem_list) / len(cur_mem_list)}")
+        img_filename = Path(f'{args.model_name}_iter_infer_' + device.type + '.png').name
+        ModelMemoryUtilities.draw_memory_lines(prev_mem, cur_mem_list, peak_mem_list, memory_unit=args.memory_unit, filename=img_filename)
 
     elif args.test == "training":
         if device.type == "cuda":
-            memory_consumption = monitor.test_cuda_training_memory(max_iters=args.max_iters, memory_unit=args.memory_unit)
+            memory_consumption = monitor.test_cuda_training_memory(max_iters=args.max_iters, memory_unit='byte')
         else:
-            memory_consumption = monitor.test_cpu_training_memory(max_iters=args.max_iters, memory_unit=args.memory_unit)
+            memory_consumption = monitor.test_cpu_training_memory(max_iters=args.max_iters, memory_unit='byte')
         print(f"Training Memory Consumption: {memory_consumption}")
+        img_filename = Path(f'{args.model_name}_train_' + device.type + '.png').name
+        ModelMemoryUtilities.draw_memory_from_dict(memory_consumption, memory_unit = args.memory_unit, filename=img_filename)
 
     else:
         print("Invalid test selected. Choose from 'forward', 'iterative_inference', or 'training'.")

@@ -37,7 +37,7 @@ class ModelMemoryUtilities:
         return psutil.Process().memory_info().rss
 
     @staticmethod
-    def draw_memory_lines(prev_memory: int, cur_memory_lst: list, peak_memory_lst: list = None, memory_unit: Literal['byte', 'mb', 'gb'] = 'byte'):
+    def draw_memory_lines(prev_memory: int, cur_memory_lst: list, peak_memory_lst: list = None, memory_unit: Literal['byte', 'mb', 'gb'] = 'byte', filename = None):
         """Plot memory usage over iterations."""
         conv_prev_memory = ModelMemoryUtilities.convert_memory(prev_memory, memory_unit)
         if peak_memory_lst is not None:
@@ -63,10 +63,13 @@ class ModelMemoryUtilities:
         plt.grid(True, linestyle='--', linewidth=0.6, alpha=0.7)
 
         plt.tight_layout()
+        # Save the figure if filename is provided
+        if filename:
+            plt.savefig(filename)
         plt.show()
         
     @staticmethod
-    def draw_memory_from_dict(memory_dict: Dict[str, Any], memory_unit: Literal['byte', 'mb', 'gb'] = 'gb'):
+    def draw_memory_from_dict(memory_dict: Dict[str, Any], memory_unit: Literal['byte', 'mb', 'gb'] = 'gb', filename = None):
         """
         Draw a memory usage plot with fixed lines for 'model_loading' and 'max_peak_memory', and dynamic lines
         for each stage list found in the dictionary.
@@ -98,4 +101,9 @@ class ModelMemoryUtilities:
         plt.grid(True, linestyle='--', linewidth=0.6, alpha=0.7)
         
         plt.tight_layout()
+
+        # Save the figure if filename is provided
+        if filename:
+            plt.savefig(filename)
+
         plt.show()
