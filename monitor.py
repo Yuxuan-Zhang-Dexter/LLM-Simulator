@@ -271,8 +271,12 @@ class ModelMemoryMonitorGPU:
             for key, value in memory_dict.items()
         }
         print(f"the training memory consumption: {converted_memory_dict}")
+        converted_peak_memory_dict = {
+            key: [ModelMemoryUtilities.convert_memory(element, memory_unit) for element in value] if isinstance(value, list) else ModelMemoryUtilities.convert_memory(value, memory_unit)
+            for key, value in peak_memory_dict.items()
+        }
 
-        return  converted_memory_dict
+        return  converted_memory_dict, converted_peak_memory_dict
     
 
 

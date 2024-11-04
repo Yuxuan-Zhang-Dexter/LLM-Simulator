@@ -59,13 +59,18 @@ def main(args):
         ModelMemoryUtilities.draw_memory_lines(prev_mem, cur_mem_list, peak_mem_list, memory_unit=args.memory_unit, filename=img_filename)
 
     elif args.test == "training":
+        peak_memory_consumption = None
         if device.type == "cuda":
-            memory_consumption = monitor.test_cuda_training_memory(max_iters=args.max_iters, memory_unit='byte')
+            memory_consumption, peak_memory_consumption  = monitor.test_cuda_training_memory(max_iters=args.max_iters, memory_unit='byte')
         else:
-            memory_consumption = monitor.test_cpu_training_memory(max_iters=args.max_iters, memory_unit='byte')
-        print(f"Training Memory Consumption: {memory_consumption}")
-        img_filename = Path(f'{args.model_name}_train_' + device.type + '.png').name
+            memory_consumption= monitor.test_cpu_training_memory(max_iters=args.max_iters, memory_unit='byte')
+        img_filename = Path(f'{args.model_name}_train_memory' + device.type + '.png').name
         ModelMemoryUtilities.draw_memory_from_dict(memory_consumption, memory_unit = args.memory_unit, filename=img_filename)
+        if peak_memory_consumption is not None:
+            img_filename = Path(f'{args.model_name}_train_peak_memory' + device.type + '.png').name
+            ModelMemoryUtilities.draw_memory_from_dict(peak_memory_consumption, memory_unit = args.memory_unit, filename=img_filename)
+
+
 
     else:
         print("Invalid test selected. Choose from 'forward', 'iterative_inference', or 'training'.")
